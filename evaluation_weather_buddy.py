@@ -1,41 +1,30 @@
-"""
-Evaluation Script for Weather Buddy — Reasoning Mode
-----------------------------------------------------
-Evaluates how well the LLM handles weather-related user questions
-by extracting intent and generating weather reasoning answers.
-
-No fallback heuristics or hard-coded assumptions.
-"""
 
 import json
 import pandas as pd
-from weather_buddy import extract_intent, get_weather_forecast
+from weather_buddy import extract_intent, get_weather_forecast  # import from your main script
 
-# -----------------------------
-# Load test dataset
-# -----------------------------
+# Step 1: Load test prompts
 test_file = "test_prompts.jsonl"
-test_cases = [json.loads(line) for line in open(test_file, "r", encoding="utf-8")]
+test_cases = [json.loads(line) for line in open(test_file, "r")]
 
 results = []
 
-# -----------------------------
-# Run Evaluation
-# -----------------------------
+# Step 2: Run each prompt through your pipeline
 for case in test_cases:
     prompt = case["prompt"]
     print(f"\nUSER: {prompt}")
 
-    # Step 1: Extract user intent via model reasoning
     intent = extract_intent(prompt)
     location = intent.get("location")
     hours = intent.get("hours")
 
-    # Step 2: Generate LLM forecast (no fallback, no hardcoding)
     if not location:
-        print("❌ Model failed to identify location.")
+        print("❌ Failed to detect location.")
         forecast = "N/A"
     else:
+        # Default if no hours extracted
+        if hours is None:
+            hours = 0
         forecast = get_weather_forecast(location, hours)
         print("✅", forecast)
 
@@ -46,9 +35,7 @@ for case in test_cases:
         "forecast": forecast
     })
 
-# -----------------------------
-# Save results
-# -----------------------------
+# Step 3: Save results
 df = pd.DataFrame(results)
 df.to_csv("weather_buddy_eval_results.csv", index=False)
 print("\n✅ Evaluation complete. Results saved to weather_buddy_eval_results.csv")
