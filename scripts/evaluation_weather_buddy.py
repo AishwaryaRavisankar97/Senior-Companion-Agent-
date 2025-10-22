@@ -16,7 +16,9 @@ user_inputs = [
     "Will it be nice out in Sydney tomorrow morning?",
     "Is it safe to walk in Portland tonight?",
     "I’m going to Fremont — rain or not?",
-    "Should I wear boots in Newark today?"
+    "Should I wear boots in Newark today?",
+    "What's the weather like in Andaman island?", 
+    "What's the weather near Mount Rainer,WA?"
 ]
 
 # Open CSV file for writing with UTF-8 BOM for Excel compatibility
