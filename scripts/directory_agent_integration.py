@@ -123,7 +123,7 @@ class DirectoryAgentIntegration:
 # Test the integration
 # -------------------------------
 if __name__ == "__main__":
-    API_KEY = "AIzaSyCO4exobIfqfF4-v7q5vaZgdL7LuBGNLQ4"
+    API_KEY = "YOUR-API-KEY-HERE"
     directory_agent = DirectoryAgentIntegration(API_KEY)
 
     test_prompts = [
