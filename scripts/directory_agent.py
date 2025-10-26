@@ -60,24 +60,35 @@ class PlacesFetcher:
 class ResponseFormatter:
     def format_places(self, places, category, location):
         if not places:
-            return f"Sorry, I couldn’t find any {category} near {location or 'your area'}."
+            return {
+                "success": False,
+                "category": category,
+                "location": location or "your area",
+                "message": f"Sorry, I couldn’t find any {category} near {location or 'your area'}.",
+                "results": []
+            }
 
-        lines = [f"Here are some {category.title()} near {location or 'your area'}:\n"]
-        for idx, place in enumerate(places[:5], start=1):
-            name = place["displayName"]["text"]
-            address = place.get("formattedAddress", "Address not available")
-            rating = place.get("rating", "No rating")
-            # Hours if available
-            hours_info = ""
+        results = []
+        for place in places[:5]:
+            entry = {
+                "name": place["displayName"]["text"],
+                "address": place.get("formattedAddress", "Address not available"),
+                "rating": place.get("rating", "No rating"),
+                "hours": None
+            }
             if "regularOpeningHours" in place:
                 weekday = place["regularOpeningHours"].get("weekdayDescriptions", [])
                 if weekday:
-                    hours_info = f" | {weekday[0]}"  # show first line (today)
-            lines.append(f"{idx}. {name} — {address} (Rating: {rating}){hours_info}")
+                    entry["hours"] = weekday[0]
+            results.append(entry)
 
-        lines.append("\nWould you like me to check their full hours or help you choose one?")
-        return "\n".join(lines)
-
+        return {
+            "success": True,
+            "category": category,
+            "location": location or "your area",
+            "results": results,
+            "message": f"Here are some {category.title()} near {location or 'your area'}."
+        }
 # -------------------------------
 # Directory Agent
 # -------------------------------
@@ -181,6 +192,6 @@ class DirectoryAgent:
 # Example usage
 # -------------------------------
 if __name__ == "__main__":
-    API_KEY = "AIzaSyCO4exobIfqfF4-v7q5vaZgdL7LuBGNLQ4"
+    API_KEY = "your-api-key"
     agent = DirectoryAgent(API_KEY)
 
