@@ -1,7 +1,7 @@
 from directory_agent import DirectoryAgent
 import re 
 
-API_KEY = "AIzaSyCO4exobIfqfF4-v7q5vaZgdL7LuBGNLQ4"   # replace with your key
+API_KEY = "Your-API-Key-Here"   # replace with your key
 
 def run_tests():
     agent = DirectoryAgent(API_KEY)
